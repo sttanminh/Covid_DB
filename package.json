@@ -33,7 +33,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "heroku-postbuild": "npm install && npm run build && cd proxy && npm install & npm start"
+    "heroku-postbuild": "npm install && npm run build && cd proxy && npm install & npm start && cd .. & npm start"
   },
   "eslintConfig": {
     "extends": [
@@ -47,6 +47,10 @@
       "not dead",
       "not op_mini all"
     ],
+    "engines": {
+      "npm": "6.14.5",
+      "node": "v14.5.0"
+    },
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
