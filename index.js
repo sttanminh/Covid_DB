@@ -7,7 +7,7 @@ const cors = require('cors')
 const request = require('superagent')
 const jsdom = require("jsdom");
 // With middleware
-app.use(express.static(path.join(__dirname,'build')))
+app.use(express.static(path.join(__dirname,'client','build')))
 app.get('/', (req, res)=>{
     
   var options = {
@@ -15,7 +15,7 @@ app.get('/', (req, res)=>{
   };
   var fileName = 'index.html';
   console.log("build/"+fileName)
-  res.sendFile("build/"+fileName, options);
+  res.sendFile("client/build/"+fileName, options);
 });
  
 
