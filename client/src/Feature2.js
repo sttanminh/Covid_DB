@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import "./Feature2.scss"
 import { Line } from 'react-chartjs-2'
 import Loader from "react-loader-spinner";
+import "./Feature2.scss"
+
 export default function Feature2({ data, theme }) {
     const [covidData, setData] = useState()
     const [graphData, setGraphData] = useState()
@@ -352,18 +353,18 @@ export default function Feature2({ data, theme }) {
                 width={10}
             ></Line>
         } else {
-            return <div className ="loading-icon">
-                
-                
-            <div className = "loading-div">
-                <Loader
-                    margin-top= "5cm"
-                    type="Oval"
-                    color="#a6a6a6"
-                    height={70}
-                    width={70}></Loader>
+            return <div className="loading-icon">
+
+
+                <div className="loading-div">
+                    <Loader
+                        margin-top="5cm"
+                        type="Oval"
+                        color="#a6a6a6"
+                        height={70}
+                        width={70}></Loader>
+                </div>
             </div>
-        </div>
         }
     }
 
@@ -443,7 +444,7 @@ export default function Feature2({ data, theme }) {
 
             <div id="rightOptions2">
                 <h3>Options</h3>
-                <label className="input-label-2">Country selection: </label>
+                <label className="input-label-2">Country Selection: </label>
                 <input ref={countryRef} list="countryList" id="countrySelection" name="countrySelection" className="input-field-2" defaultValue={defaultCountry} />
                 <div dangerouslySetInnerHTML={{ __html: htmlCountryList() }} />
 

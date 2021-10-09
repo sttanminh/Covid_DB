@@ -7,9 +7,11 @@
   padding: 20px;
   margin: 20px auto;
   border-radius: 20px;
-  /* float: left;
-  position: relative;
-  left: 50% */
+
+  .help-body-div {
+    border: 1vh double #ffdc3e;
+    background-color: white;
+  }
 }
 
 .Feature3-dark {
@@ -28,6 +30,40 @@
   .input-field-3 {
     background-color: rgb(200, 200, 200);
     border-color: transparent;
+  }
+
+  .help-body-div {
+    border: 1vh double ivory;
+    background-color: #161716;
+  }
+}
+
+.help {
+
+  &-icon {
+      cursor: pointer;
+      float: right;
+      font-size: 5vh;
+      fill: rgb(168, 168, 168);
+  }
+
+  &-body {
+
+    &-div {
+      position: absolute;
+      width: 80vh;
+      padding: 0 3vh 4vh 3vh;
+      margin-top: 8vh;
+      // container size 90vh, this div 80vh, 
+      // half of 10vh = 5vh - 3vh padding - 0.5 border, to make center
+      margin-left: 1.5vh;
+      cursor: default;
+    }
+
+    &-text {
+      text-align: left;
+      font-size: 2.25vh;
+    }
   }
 }
 

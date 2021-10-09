@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import './Feature1.scss'
 import { Line } from 'react-chartjs-2'
 import { IoIosArrowRoundBack, IoIosArrowRoundForward } from "react-icons/io";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
@@ -7,6 +6,7 @@ import { Slider } from '@material-ui/core'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Loader from "react-loader-spinner";
 import 'react-tabs/style/react-tabs.css';
+import './Feature1.scss'
 
 export default function Feature1({ data, theme }) {
     const [vicData, setVicData] = useState()
@@ -106,8 +106,8 @@ export default function Feature1({ data, theme }) {
     /**
      * Receives a startDay, endDay input strings and smoothness value then extracts the specified data from vicData
      * 
-     * @param {string} startDate start date of the data to be taken, in the format (yyyy-mm-dd)
-     * @param {string} endDate last date of the data to be taken, in the format (yyyy-mm-dd)
+     * @param {Date} startDate Date object of the start date of the data to be taken
+     * @param {Date} endDate Date object of the last date of the data to be taken
      * @param {number} smoothness a smoothness level between 1 (not smoothed) to 7 (smoothed by 7 days)
      * @returns array of cases per day for victoria already smoothed
      */
@@ -120,16 +120,24 @@ export default function Feature1({ data, theme }) {
         let endDateStr = endDateStrArr[2] + " " + endDateStrArr[1] + " " + endDateStrArr[3].substr(2, 2);
 
         let inDateRange = false;
+        let lastDate = false;
 
         for (let i = 0; i < vicData.length; i++) {
+
             if (vicData[i].date === startDateStr) {
                 inDateRange = true
             } else if (vicData[i].date === endDateStr) {
-                break;
+                lastDate = true;
             }
 
             if (inDateRange && vicData[i].cases !== null) {
                 data.push(vicData[i])
+
+                if (lastDate) {
+                    // this is the last date required, break loop
+                    break;
+                }
+
             }
         }
 
@@ -174,7 +182,6 @@ export default function Feature1({ data, theme }) {
      * @returns HTML element for the graph
      */
     function showGraph() {
-
 
         if (vicData !== undefined) {
             let dataToDisplay = createGraphData()
@@ -263,7 +270,7 @@ export default function Feature1({ data, theme }) {
                                     1 - 7.
                                     <br></br>
                                     <p className="covidReference">This data was sourced from the <br></br>
-                                    <a href="https://www.coronavirus.vic.gov.au/victorian-coronavirus-covid-19-data">Victorian Government (COVID-19 Data).</a></p>
+                                        <a href="https://www.coronavirus.vic.gov.au/victorian-coronavirus-covid-19-data">Victorian Government (COVID-19 Data).</a></p>
                                 </div>
                             </div>
                         </div>}
@@ -287,7 +294,6 @@ export default function Feature1({ data, theme }) {
             </div>
         }
     }
-
 
     /**
      * Creates and return an object that has the formatted date labels, and cases data array ready to be 
@@ -327,7 +333,7 @@ export default function Feature1({ data, theme }) {
     }
 
     /**
-     * 
+     * Moves the date range of the graph backwards 6 months (into the past)
      */
     function dataBack() {
 
@@ -348,7 +354,7 @@ export default function Feature1({ data, theme }) {
     }
 
     /**
-     * 
+     * Moves the date range of the graph forwards 6 months (towards the future/current day)
      */
     function dataForward() {
 
@@ -379,20 +385,19 @@ export default function Feature1({ data, theme }) {
             <h1 className="feature-heading">COVID-19 in Victoria</h1>
             <Tabs>
                 <TabList>
+                <Tab> Victoria's Daily New cases </Tab>
                     <Tab> Victoria's Data Graph</Tab>
-                    <Tab> Victoria's Daily New cases </Tab>
                 </TabList>
+                <TabPanel>
+                    {displayTodayInfo()}
+                </TabPanel>
                 <TabPanel>
                     <div id="graph1">
                         {showGraph()}
                     </div>
-                </TabPanel>
-                <TabPanel>
-                    {displayTodayInfo()}
                 </TabPanel>
             </Tabs>
         </div>
     )
 
 };
-

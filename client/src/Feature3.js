@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { run } from './SIR'
+import { IoMdHelpCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
 import "./Feature3.scss"
 
 export default function Feature3({ data, theme }) {
     const [covidData, setData] = useState()
     const [object, setObject] = useState(null)
+    const [helpBoxState, setHelpBoxState] = useState(false)
     const [feature3Theme, setTheme] = useState("Feature3-light")
 
     const countryRef = useRef()
@@ -20,10 +22,10 @@ export default function Feature3({ data, theme }) {
     }, [data])
 
     useEffect(() => {
-        if (theme === "App-light"){
+        if (theme === "App-light") {
             setTheme("Feature3-light")
         }
-        else{
+        else {
             setTheme("Feature3-dark")
         }
     }, [theme])
@@ -90,9 +92,9 @@ export default function Feature3({ data, theme }) {
         }
     }
 
-   /**
-    * Performs error checks for user input then calls the SIR calculation function and displays the output
-    */
+    /**
+     * Performs error checks for user input then calls the SIR calculation function and displays the output
+     */
     function runEngine() {
 
         // check if data loaded in yet
@@ -144,7 +146,7 @@ export default function Feature3({ data, theme }) {
      * 
      * @returns HTML element for the graph
      */
-    function Show() {
+    function ShowGraph() {
         if (object !== null) {
             return <div>
                 <h2>New cases each day: {object.newCases}</h2>
@@ -156,8 +158,58 @@ export default function Feature3({ data, theme }) {
         }
     }
 
+    /**
+     * Creates a react icon component depending on if the help text is currently displayed. If not it is a "?", else it
+     * will be a "X"
+     * 
+     * @returns react icon component for user interaction to open/close help information
+     */
+    function ShowHelpIcon() {
+        if (!helpBoxState) {
+            return <IoMdHelpCircleOutline onClick={() => { setHelpBoxState(!helpBoxState) }} className="help-icon"></IoMdHelpCircleOutline>
+        } else {
+            return <IoMdCloseCircleOutline onClick={() => { setHelpBoxState(!helpBoxState) }} className="help-icon"></IoMdCloseCircleOutline>
+        }
+    }
+
+
+    /**
+     * Creates a HTML object for the div which appears when the help button is clicked
+     * 
+     * @returns HTML object containing the help information
+     */
+    function ShowHelp() {
+        if (helpBoxState) {
+            return <div className="help-body-div">
+                <h3>Help Information</h3>
+                <p className="help-body-text">
+                    The COVID ENGINE uses the SIRD model to estimate the number of cases per day and number of deaths
+                    per day in the specified country when its population is at the specified vaccination rate (fully vaccinated)
+                    on a specified number of days after the initial outbreak. <br></br>
+                    <br></br>
+                    <span className="highlight-red">SIRD</span> Model: Stands for:<br></br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Susceptible:</span> the part of the population that can still be infected <br></br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Infected:</span> the part of the population that is currently infected <br></br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Recovered:</span> the part of the population that have recovered after infection <br></br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Dead:</span> the part of the population who has died <br></br>
+                    <br></br>
+                    Input Guide: <br></br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Vaccination Rate:</span> Percentage of fully vaccinated in the whole population <br></br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Day Number:</span> Number of days from the initial outbreak <br></br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Country Selection:</span> Target country to run estimation for
+                </p>
+            </div>
+        }
+        else {
+            return null;
+        }
+    }
+
     return (
         <div className={feature3Theme}>
+            <ShowHelpIcon></ShowHelpIcon>
+            <ShowHelp></ShowHelp>
+
             <h1 className="feature-heading"> Covid Engine</h1>
             <br></br>
 
@@ -167,7 +219,7 @@ export default function Feature3({ data, theme }) {
                     <br></br>
                     <label className="input-label-3">Day Number:</label>
                     <br></br>
-                    <label className="input-label-3">Country selection:</label>
+                    <label className="input-label-3">Country Selection:</label>
                 </div>
                 <div id="innerInputsDiv3">
                     <input ref={vacRateRef} type="number" id="inputVRate" name="inputVRate" className="input-field-3" min="0" max="100"></input>
@@ -179,13 +231,11 @@ export default function Feature3({ data, theme }) {
                 </div>
 
                 <div id="buttonDiv3">
-                    <button className="submit-button" onClick={() => {
-                        runEngine()
-                    }}>Submit and Run</button>
+                    <button className="submit-button" onClick={runEngine}>Submit and Run</button>
                 </div>
             </div>
 
-            <Show></Show>
+            <ShowGraph></ShowGraph>
 
         </div>
     )

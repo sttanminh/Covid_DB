@@ -7,9 +7,6 @@
   padding: 20px;
   margin: 20px auto;
   border-radius: 20px;
-  /* float: left;
-  position: relative;
-  left: -50% */
 
   #leftGraph2 {
     background-color: rgb(255, 255, 255);
@@ -21,9 +18,9 @@
 }
 
 .Feature2-dark {
+  text-align: center;
   border-style: solid;
   border-color: #ffffcc;
-  text-align: center;
   background: linear-gradient(120deg, #3a3d3a, #3a3d3a, #3a3d3a);
   width: 90vh;
   height: 70vh;
