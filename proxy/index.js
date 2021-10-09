@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname,'../build','index.html'))
   })
   }
-const port = process.env.PORT || "9000";
+const port = process.env.PORT || 9000;
 server.listen(port, () => {
   console.log(`Proxy server listening on http://localhost:${port}`)
 })
