@@ -1,9 +1,10 @@
 {
     "name": "team4_covid_app_backend",
+    "main": "index.js",
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "start": "npm install && node index.js",
+        "start": "node index.js",
         "heroku-postbuild": "cd ./client && npm install && npm run build"
     },
     "engines": {
