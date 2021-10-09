@@ -29,11 +29,10 @@
   },
   "type": "module",
   "scripts": {
-    "start": "react-scripts start ",
+    "start": "cd ./proxy && npm start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "heroku-postbuild": "npm install && npm run build && cd proxy && npm install && npm start"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
