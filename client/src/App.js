@@ -23,7 +23,7 @@ function App() {
 
   useEffect(() => {
     console.log("before fetch")
-    fetch('https://covid-db-2021.herokuapp.com//victoria-cases')
+    fetch('https://covid-2021-db.herokuapp.com/victoria-cases')
       .then(response => response.json())
       .then(data => {
         setVicData(data)
