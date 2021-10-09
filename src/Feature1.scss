@@ -1,0 +1,182 @@
+.Feature1-light {
+    text-align: center;
+    // border-style: solid;
+    background: linear-gradient(120deg, #f2f2f2, #f2f2f2, #f2f2f2);
+    width: 90vh;
+    height: 80vh;
+    margin-top: 50px;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 20px;
+    /* float: left;
+    position: relative;
+    left: -50% */
+
+    #graph1 {
+        background-color: rgb(255, 255, 255);
+    }
+
+    #titlingLine {
+        color: rgb(0, 0, 0);
+        font-weight: bold;
+        font-size: 3.25vh;
+        padding: 0;
+    }
+
+    #caseNumber {
+        background-color: rgb(255, 255, 255);
+        color: black;
+        font-weight: bold;
+        font-size: 5.25vh;
+        margin: 0%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1.5vh 2.35vh 1.5vh;
+        width: 20.5vh;
+    }
+
+    #dateLine {
+        background-color: rgb(216, 214, 214);
+        margin: 0%;
+        font-size: 1.5vh;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1.5vh 2vh 1.5vh;
+        width: 21.2vh;
+    }
+}
+
+.Feature1-dark {
+    text-align: center;
+    border-style: solid;
+    border-color: #ffffcc;
+    background: linear-gradient(120deg, #3a3d3a, #3a3d3a, #3a3d3a);
+    width: 90vh;
+    height: 80vh;
+    margin-top: 50px;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 20px;
+    color: #ffffb3;
+
+    #graph1 {
+        background-color: rgb(200, 200, 200);
+    }
+
+    #titlingLine {
+        font-weight: bold;
+        font-size: 3.25vh;
+        padding: 0;
+    }
+
+    #caseNumber {
+        background-color: rgb(200, 200, 200);
+        color: rgb(0, 0, 0);
+        font-weight: bold;
+        font-size: 5.25vh;
+        margin: 0%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1.5vh 2.35vh 1.5vh;
+        width: 20.5vh;
+    }
+
+    #dateLine {
+        background-color: rgb(175, 175, 175);
+        color: rgb(37, 37, 37);
+        margin: 0%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1.5vh 2vh 1.5vh;
+        width: 21.2vh;
+    }
+}
+
+.arrow-icon {
+    font-size: 5rem;
+    margin-left: 0%;
+    cursor: pointer;
+}
+
+.infoIcon {
+    cursor: pointer;
+}
+
+.time-sel-button-2 {
+    font-size: 2vh;
+    width: 40%;
+    height: 4.5vh;
+    padding: 0.79vh;
+    margin: 0.79vh;
+    background-color: rgb(131, 143, 255);
+    border-radius: 1.5vh;
+
+    &:hover {
+        border-color: #26ffbe9a;
+        transition: 0.5s;
+    }
+}
+
+#graph1 {
+    width: 90%;
+    margin: auto;
+}
+.slider {
+    float: right;
+    width: 12cm;
+    margin-top: 8mm;
+    margin-right: 3cm;
+}
+.arrows {
+    float: left;
+    margin-left: 5mm;
+}
+.loading-icon {
+    height: 15cm;
+    // background-color: #26ffbe9a;
+}
+.loading-div {
+    position: relative;
+    top: 6cm;
+}
+
+.popupThing,
+.popupOverlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+}
+
+.popupOverlay {
+    background: rgba(49, 49, 49, 0.8);
+}
+
+.popupContent {
+    width: auto;
+    height: auto;
+    top: 40%;
+    left: 50%;
+    max-width: 600px;
+    min-width: 300px;
+    background: #f1f1f1;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    padding: 14px 28px;
+    border-radius: 3px;
+}
+
+.sliderInfoPopup {
+    float: right;
+    width: auto;
+    margin-top: -7mm;
+    margin-right: 1.5cm;
+}
+
+.covidReference {
+    font-size: 1.25vh;
+    color: rgba(26, 26, 26, 0.726);
+}

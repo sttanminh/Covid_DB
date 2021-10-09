@@ -1,0 +1,398 @@
+import { useState, useEffect, useRef } from 'react';
+import './Feature1.scss'
+import { Line } from 'react-chartjs-2'
+import { IoIosArrowRoundBack, IoIosArrowRoundForward } from "react-icons/io";
+import { BsFillQuestionCircleFill } from "react-icons/bs";
+import { Slider } from '@material-ui/core'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import Loader from "react-loader-spinner";
+import 'react-tabs/style/react-tabs.css';
+
+export default function Feature1({ data, theme }) {
+    const [vicData, setVicData] = useState()
+    const [feature1Theme, setTheme] = useState("Feature2-light")
+
+    const [startDate, setStartDate] = useState()
+    const [endDate, setEndDate] = useState()
+    const [smoothingValue, setSmoothingValue] = useState(1)
+    const updateRange = (e, data) => { setSmoothingValue(data) }
+
+    const [popupShow, setPopupShow] = useState(false)
+
+    function togglePopup() {
+        setPopupShow(!popupShow)
+    }
+
+    function displayTodayInfo() {
+
+        if (vicData !== undefined) {
+
+            let todayVicIndex = vicData.length - 1
+            let todayCaseVal = vicData[todayVicIndex].cases
+
+            if (todayCaseVal == null) {
+                todayVicIndex = todayVicIndex - 1
+                todayCaseVal = vicData[todayVicIndex].cases
+            }
+
+            let todayCaseDate = vicData[todayVicIndex].date
+
+            return <div className="todayVicCases">
+                <p id="titlingLine">Number of cases:</p>
+                <p id="caseNumber">{todayCaseVal}</p>
+                <p id="dateLine">As recorded on: &nbsp;(<i>{todayCaseDate}</i>)</p>
+                <BsFillQuestionCircleFill onClick={togglePopup} className="infoIcon"></BsFillQuestionCircleFill>
+
+                {popupShow && <div className="popupThing">
+                    <div className="popupOverlay" onClick={togglePopup}>
+                        <div className="popupContent">
+                            This data was sourced from the <br></br>
+                            <a href="https://www.coronavirus.vic.gov.au/victorian-coronavirus-covid-19-data">Victorian Government (COVID-19 Data).</a>
+                        </div>
+                    </div>
+                </div>}
+            </div >
+        }
+        else {
+            return <div className="loading-icon">
+
+
+                <div className="loading-div">
+                    <Loader
+                        margin-top="5cm"
+                        type="Oval"
+                        color="#a6a6a6"
+                        height={70}
+                        width={70}></Loader>
+                </div>
+            </div>
+        }
+    }
+
+    function valuetext(value) {
+        return `${value}`;
+    }
+
+
+    useEffect(() => {
+        if (theme === "App-light") {
+            setTheme("Feature1-light")
+        }
+        else {
+            setTheme("Feature1-dark")
+        }
+    }, [theme])
+
+    useEffect(() => {
+        setVicData(data)
+    }, [data])
+    useEffect(() => {
+        let today = new Date()
+        let startDay = new Date()
+        // console.log(today,startDay)
+        if (today.getMonth() < 6) {
+            startDay.setMonth(startDay.getMonth() - 6)
+            startDay.setYear(startDay.getYear() - 1)
+        }
+        else {
+            startDay.setMonth(startDay.getMonth() - 6)
+        }
+        setStartDate(startDay)
+        setEndDate(today)
+        //console.log(startDate,endDate)
+
+    }, [])
+
+    /**
+     * Receives a startDay, endDay input strings and smoothness value then extracts the specified data from vicData
+     * 
+     * @param {string} startDate start date of the data to be taken, in the format (yyyy-mm-dd)
+     * @param {string} endDate last date of the data to be taken, in the format (yyyy-mm-dd)
+     * @param {number} smoothness a smoothness level between 1 (not smoothed) to 7 (smoothed by 7 days)
+     * @returns array of cases per day for victoria already smoothed
+     */
+    function UseData(startDate, endDate, smoothness) {
+        data = []
+
+        let startDateStrArr = new Date(startDate).toDateString().split(" ");
+        let startDateStr = startDateStrArr[2] + " " + startDateStrArr[1] + " " + startDateStrArr[3].substr(2, 2);
+        let endDateStrArr = new Date(endDate).toDateString().split(" ");
+        let endDateStr = endDateStrArr[2] + " " + endDateStrArr[1] + " " + endDateStrArr[3].substr(2, 2);
+
+        let inDateRange = false;
+
+        for (let i = 0; i < vicData.length; i++) {
+            if (vicData[i].date === startDateStr) {
+                inDateRange = true
+            } else if (vicData[i].date === endDateStr) {
+                break;
+            }
+
+            if (inDateRange && vicData[i].cases !== null) {
+                data.push(vicData[i])
+            }
+        }
+
+        return smoothData(data, smoothness)
+    }
+
+
+
+    /**
+     * Smooths out the data at each date by averaging it with the data before and after the date
+     * the range of this is specified by the smoothness.
+     * 
+     * @param {object[]} data array of data, each element is an object
+     * @param {number} smoothness a smoothness level between 1 (not smoothed) to 7 (smoothed by 7 days)
+     * @return the data that has been smoothed
+     */
+
+    function smoothData(data, smoothness) {
+
+        const average = (fromIndex, toIndex) => {
+            let sum = 0;
+            for (let i = fromIndex; i < toIndex; i++) {
+                sum += data[i].cases
+            }
+            return sum / (toIndex - fromIndex)
+        }
+
+        let smoothedData = []
+
+        let lowerRange = Math.floor(smoothness / 2);
+        let upperRange = Math.ceil(smoothness / 2);
+        for (let i = lowerRange; i <= data.length - upperRange; i++) {
+            smoothedData.push({ ...data[i], cases: average(i - lowerRange, i + upperRange) })
+        }
+
+        return smoothedData
+    }
+
+    /**
+     * Creates the HTML elements for the graph and shows it on the page
+     * 
+     * @returns HTML element for the graph
+     */
+    function showGraph() {
+
+
+        if (vicData !== undefined) {
+            let dataToDisplay = createGraphData()
+            return <div>
+                <Line
+                    data={dataToDisplay}
+                    options={{
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: ``,
+                                fontSize: 20
+                            },
+                            legend: {
+                                display: false,
+                            }
+                        },
+                        elements: {
+                            point: {
+                                radius: 2
+                            }
+                        },
+                        scales: {
+                            case_death: {
+                                display: true,
+                                position: 'left',
+                                type: 'linear',
+                                min: 0,
+                                title: {
+                                    display: true,
+                                    text: 'New Cases/Day'
+                                }
+                            },
+                            date_period: {
+                                display: true,
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: 'Date (dd/mm/yyyy)'
+                                }
+                            }
+
+                        }
+                    }}
+
+                    // radio of height and width
+                    height={36}
+                    width={50}
+                ></Line>
+
+                <div>
+                    <div className="arrows">
+                        <IoIosArrowRoundBack onClick={dataBack} className="arrow-icon"></IoIosArrowRoundBack>
+                        <IoIosArrowRoundForward onClick={dataForward} className="arrow-icon"></IoIosArrowRoundForward>
+                    </div>
+                    <div className="slider">
+                        <Slider
+                            size="10cm"
+                            color="secondary"
+                            aria-label="smoothing"
+                            defaultValue={1}
+                            getAriaValueText={valuetext}
+                            valueLabelDisplay="auto"
+                            value={smoothingValue}
+                            onChange={updateRange}
+                            marks
+                            step={1}
+                            min={1}
+                            max={7}
+                        />
+
+                    </div>
+
+                    <div className="sliderInfoPopup"><BsFillQuestionCircleFill onClick={togglePopup} color='grey' className="infoIcon"></BsFillQuestionCircleFill>
+                        {popupShow && <div className="popupThing">
+                            <div className="popupOverlay" onClick={togglePopup}>
+                                <div className="popupContent">
+                                    This is a graph of daily COVID cases in Victoria,
+                                    <br></br>
+                                    since April 9th 2020. Our graph displays data over a range of 6 months,
+                                    for make smaller day-to-day fluctuations more visible to the user.
+                                    <br></br>
+                                    <br></br>
+                                    The pink sliding scale is available to smooth data using moving averages (of our own calculations), ranging from
+                                    <br></br>
+                                    1 - 7.
+                                    <br></br>
+                                    <p className="covidReference">This data was sourced from the <br></br>
+                                    <a href="https://www.coronavirus.vic.gov.au/victorian-coronavirus-covid-19-data">Victorian Government (COVID-19 Data).</a></p>
+                                </div>
+                            </div>
+                        </div>}
+                    </div>
+
+                </div>
+
+            </div>
+        } else {
+            return <div className="loading-icon">
+
+
+                <div className="loading-div">
+                    <Loader
+                        margin-top="5cm"
+                        type="Oval"
+                        color="#a6a6a6"
+                        height={70}
+                        width={70}></Loader>
+                </div>
+            </div>
+        }
+    }
+
+
+    /**
+     * Creates and return an object that has the formatted date labels, and cases data array ready to be 
+     * 
+     * @param {Object} dataObject 
+     * @returns Object containing data in the format ready to be graphed using chartjs
+     */
+    function createGraphData() {
+
+        let processedData = UseData(startDate, endDate, smoothingValue)
+
+        // get date labels and number of cases from
+        let dateLabels = []
+        let casesArray = []
+
+        processedData.forEach(element => {
+            let dateString = element.date
+            dateLabels.push(new Date(dateString).toLocaleDateString())
+            casesArray.push(element.cases)
+        })
+
+        let dataForGraph = {
+            labels: dateLabels,
+            datasets: [{
+                label: 'New cases',
+                data: casesArray,
+                borderWidth: 1,
+                fill: false,
+                borderColor: 'rgb(0, 0, 0)',
+                pointBackgroundColor: 'rgb(0, 0, 0)',
+                tension: 1,
+                yAxisID: 'case_death',
+                xAxisID: 'date_period'
+            }]
+        }
+        return dataForGraph
+    }
+
+    /**
+     * 
+     */
+    function dataBack() {
+
+        if (startDate.getYear() >= 120) {
+
+            console.log("in")
+
+            let startDay = startDate
+            startDay.setMonth(startDay.getMonth() - 6)
+
+            let endDay = endDate
+            endDay.setMonth(endDay.getMonth() - 6)
+
+            setEndDate(new Date(endDay))
+            setStartDate(new Date(startDay))
+
+        }
+    }
+
+    /**
+     * 
+     */
+    function dataForward() {
+
+        let today = new Date()
+        let end = new Date(endDate)
+
+        console.log(end)
+
+        end.setMonth(end.getMonth() + 4)
+
+        if (end <= today) {
+
+            let startDay = startDate
+            startDay.setMonth(startDay.getMonth() + 6)
+
+            let endDay = endDate
+            endDay.setMonth(endDay.getMonth() + 6)
+
+            setEndDate(new Date(endDay))
+            setStartDate(new Date(startDay))
+
+        }
+    }
+
+    return (
+        <div className={feature1Theme}>
+
+            <h1 className="feature-heading">COVID-19 in Victoria</h1>
+            <Tabs>
+                <TabList>
+                    <Tab> Victoria's Data Graph</Tab>
+                    <Tab> Victoria's Daily New cases </Tab>
+                </TabList>
+                <TabPanel>
+                    <div id="graph1">
+                        {showGraph()}
+                    </div>
+                </TabPanel>
+                <TabPanel>
+                    {displayTodayInfo()}
+                </TabPanel>
+            </Tabs>
+        </div>
+    )
+
+};
+
