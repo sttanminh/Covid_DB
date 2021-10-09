@@ -1,10 +1,10 @@
 const { server } = require('./service.js')
 if (process.env.NODE_ENV === "production") {
   server.use('/',
-    express.static('../build')
+    express.static('./client/build')
   );
   server.get('*',(req,res)=>{
-    res.sendFile(path.resolve(__dirname,'../build','index.html'))
+    res.sendFile(path.resolve(__dirname,'./client/build','index.html'))
   })
   }
 const port = process.env.PORT || 9000;
