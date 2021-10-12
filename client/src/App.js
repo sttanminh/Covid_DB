@@ -25,7 +25,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    fetch('http://localhost:9123/victoria-cases')
+    fetch('https://covid-2021-db.herokuapp.com/victoria-cases')
       .then(response => response.json())
       .then(data => {
         setVicData(data)
