@@ -1,13 +1,18 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2'
-import { IoIosArrowRoundBack, IoIosArrowRoundForward } from "react-icons/io";
-import { BsFillQuestionCircleFill } from "react-icons/bs";
+import { IoIosArrowRoundBack, IoIosArrowRoundForward, IoMdInformationCircleOutline } from "react-icons/io";
 import { Slider } from '@material-ui/core'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Loader from "react-loader-spinner";
 import 'react-tabs/style/react-tabs.css';
 import './Feature1.scss'
 
+/**
+ * Feature 1 of application: daily cases and graph for victorian cases
+ * 
+ * @param {{object[], string}} param0 victorian cases data and current colour theme  
+ * @returns react component of feature 1
+ */
 export default function Feature1({ data, theme }) {
     const [vicData, setVicData] = useState()
     const [feature1Theme, setTheme] = useState("Feature2-light")
@@ -15,64 +20,8 @@ export default function Feature1({ data, theme }) {
     const [startDate, setStartDate] = useState()
     const [endDate, setEndDate] = useState()
     const [smoothingValue, setSmoothingValue] = useState(1)
-    const updateRange = (e, data) => { setSmoothingValue(data) }
-
     const [popupShow, setPopupShow] = useState(false)
-
-    function togglePopup() {
-        setPopupShow(!popupShow)
-    }
-
-    function displayTodayInfo() {
-
-        if (vicData !== undefined) {
-
-            let todayVicIndex = vicData.length - 1
-            let todayCaseVal = vicData[todayVicIndex].cases
-
-            if (todayCaseVal == null) {
-                todayVicIndex = todayVicIndex - 1
-                todayCaseVal = vicData[todayVicIndex].cases
-            }
-
-            let todayCaseDate = vicData[todayVicIndex].date
-
-            return <div className="todayVicCases">
-                <p id="titlingLine">Number of cases:</p>
-                <p id="caseNumber">{todayCaseVal}</p>
-                <p id="dateLine">As recorded on: &nbsp;(<i>{todayCaseDate}</i>)</p>
-                <BsFillQuestionCircleFill onClick={togglePopup} className="infoIcon"></BsFillQuestionCircleFill>
-
-                {popupShow && <div className="popupThing">
-                    <div className="popupOverlay" onClick={togglePopup}>
-                        <div className="popupContent">
-                            This data was sourced from the <br></br>
-                            <a href="https://www.coronavirus.vic.gov.au/victorian-coronavirus-covid-19-data">Victorian Government (COVID-19 Data).</a>
-                        </div>
-                    </div>
-                </div>}
-            </div >
-        }
-        else {
-            return <div className="loading-icon">
-
-
-                <div className="loading-div">
-                    <Loader
-                        margin-top="5cm"
-                        type="Oval"
-                        color="#a6a6a6"
-                        height={70}
-                        width={70}></Loader>
-                </div>
-            </div>
-        }
-    }
-
-    function valuetext(value) {
-        return `${value}`;
-    }
-
+    const updateRange = (e, data) => { setSmoothingValue(data) }
 
     useEffect(() => {
         if (theme === "App-light") {
@@ -89,7 +38,7 @@ export default function Feature1({ data, theme }) {
     useEffect(() => {
         let today = new Date()
         let startDay = new Date()
-        // console.log(today,startDay)
+
         if (today.getMonth() < 6) {
             startDay.setMonth(startDay.getMonth() - 6)
             startDay.setYear(startDay.getYear() - 1)
@@ -99,7 +48,6 @@ export default function Feature1({ data, theme }) {
         }
         setStartDate(startDay)
         setEndDate(today)
-        //console.log(startDate,endDate)
 
     }, [])
 
@@ -137,14 +85,10 @@ export default function Feature1({ data, theme }) {
                     // this is the last date required, break loop
                     break;
                 }
-
             }
         }
-
         return smoothData(data, smoothness)
     }
-
-
 
     /**
      * Smooths out the data at each date by averaging it with the data before and after the date
@@ -154,7 +98,6 @@ export default function Feature1({ data, theme }) {
      * @param {number} smoothness a smoothness level between 1 (not smoothed) to 7 (smoothed by 7 days)
      * @return the data that has been smoothed
      */
-
     function smoothData(data, smoothness) {
 
         const average = (fromIndex, toIndex) => {
@@ -177,15 +120,63 @@ export default function Feature1({ data, theme }) {
     }
 
     /**
-     * Creates the HTML elements for the graph and shows it on the page
+     * Creates the HTML elements for the daily case number for victoria tab
      * 
-     * @returns HTML element for the graph
+     * @returns HTML element for the daily case number tab
+     */
+    function displayTodayInfo() {
+
+        if (vicData !== undefined) {
+
+            let todayVicIndex = vicData.length - 1
+            let todayCaseVal = vicData[todayVicIndex].cases
+
+            if (todayCaseVal == null) {
+                todayVicIndex = todayVicIndex - 1
+                todayCaseVal = vicData[todayVicIndex].cases
+            }
+
+            let todayCaseDate = vicData[todayVicIndex].date
+
+            return <div>
+                <IoMdInformationCircleOutline className="info-icon" onClick={() => { setPopupShow(!popupShow) }}></IoMdInformationCircleOutline>
+
+                <div id="caseNumberDiv1">{todayCaseVal}</div>
+                <p className="small-label-1">[As recorded on: <i>{todayCaseDate}</i>]</p>
+
+                {popupShow && <div className="popup-div">
+                    <div className="popup-overlay" onClick={() => { setPopupShow(!popupShow) }}>
+                        <div className="popup-content">
+                            This data was sourced from:
+                            <br></br>
+                            <a href="https://covidlive.com.au/report/daily-cases/vic">Covid Live Victoria Data</a>
+                        </div>
+                    </div>
+                </div>}
+            </div>
+        }
+        else {
+            return <div className="loading-div">
+                <Loader
+                    type="Oval"
+                    color="#a6a6a6">
+                </Loader>
+            </div>
+        }
+    }
+
+    /**
+     * Creates the HTML elements for the graph and shows it on the tab for the gram
+     * 
+     * @returns HTML element for the graph tab
      */
     function showGraph() {
 
         if (vicData !== undefined) {
             let dataToDisplay = createGraphData()
-            return <div>
+
+            return <div id="graphTab1">
+
                 <Line
                     data={dataToDisplay}
                     options={{
@@ -232,18 +223,19 @@ export default function Feature1({ data, theme }) {
                     width={50}
                 ></Line>
 
-                <div>
-                    <div className="arrows">
-                        <IoIosArrowRoundBack onClick={dataBack} className="arrow-icon"></IoIosArrowRoundBack>
-                        <IoIosArrowRoundForward onClick={dataForward} className="arrow-icon"></IoIosArrowRoundForward>
+                <div id="graphControls">
+
+                    <div>
+                        <IoIosArrowRoundBack onClick={dataBack} className="arrow-icon-1"></IoIosArrowRoundBack>
+                        <IoIosArrowRoundForward onClick={dataForward} className="arrow-icon-1"></IoIosArrowRoundForward>
                     </div>
-                    <div className="slider">
+
+                    <div id="sliderDiv1">
                         <Slider
-                            size="10cm"
                             color="secondary"
                             aria-label="smoothing"
                             defaultValue={1}
-                            getAriaValueText={valuetext}
+                            getAriaValueText={(value) => `${value}`}
                             valueLabelDisplay="auto"
                             value={smoothingValue}
                             onChange={updateRange}
@@ -252,45 +244,40 @@ export default function Feature1({ data, theme }) {
                             min={1}
                             max={7}
                         />
-
                     </div>
 
-                    <div className="sliderInfoPopup"><BsFillQuestionCircleFill onClick={togglePopup} color='grey' className="infoIcon"></BsFillQuestionCircleFill>
-                        {popupShow && <div className="popupThing">
-                            <div className="popupOverlay" onClick={togglePopup}>
-                                <div className="popupContent">
-                                    This is a graph of daily COVID cases in Victoria,
+                    <div>
+                        <IoMdInformationCircleOutline onClick={() => { setPopupShow(!popupShow) }} className="info-icon" style={{ marginTop: "3vh" }}></IoMdInformationCircleOutline>
+
+                        {popupShow && <div className="popup-div">
+
+                            <div className="popup-overlay" onClick={() => { setPopupShow(!popupShow) }}>
+                                <div className="popup-content">
+                                    This is a graph of the daily COVID cases in Victoria, since April 9th 2020. Our graph displays
+                                    the data over a range of 6 months, for smaller day-to-day fluctuations to be more visible to the user.
                                     <br></br>
-                                    since April 9th 2020. Our graph displays data over a range of 6 months,
-                                    for make smaller day-to-day fluctuations more visible to the user.
+                                    <br></br>
+                                    The pink sliding scale is available to smooth the data using moving averages (of our own calculations),
+                                    ranging from 1 - 7.
                                     <br></br>
                                     <br></br>
-                                    The pink sliding scale is available to smooth data using moving averages (of our own calculations), ranging from
+                                    This data was sourced from:
                                     <br></br>
-                                    1 - 7.
-                                    <br></br>
-                                    <p className="covidReference">This data was sourced from the <br></br>
-                                        <a href="https://www.coronavirus.vic.gov.au/victorian-coronavirus-covid-19-data">Victorian Government (COVID-19 Data).</a></p>
+                                    <a href="https://covidlive.com.au/report/daily-cases/vic">Covid Live Victoria Data</a>
                                 </div>
                             </div>
                         </div>}
-                    </div>
 
+                    </div>
                 </div>
 
             </div>
         } else {
-            return <div className="loading-icon">
-
-
-                <div className="loading-div">
-                    <Loader
-                        margin-top="5cm"
-                        type="Oval"
-                        color="#a6a6a6"
-                        height={70}
-                        width={70}></Loader>
-                </div>
+            return <div className="loading-div">
+                <Loader
+                    type="Oval"
+                    color="#a6a6a6">
+                </Loader>
             </div>
         }
     }
@@ -339,8 +326,6 @@ export default function Feature1({ data, theme }) {
 
         if (startDate.getYear() >= 120) {
 
-            console.log("in")
-
             let startDay = startDate
             startDay.setMonth(startDay.getMonth() - 6)
 
@@ -349,7 +334,6 @@ export default function Feature1({ data, theme }) {
 
             setEndDate(new Date(endDay))
             setStartDate(new Date(startDay))
-
         }
     }
 
@@ -360,8 +344,6 @@ export default function Feature1({ data, theme }) {
 
         let today = new Date()
         let end = new Date(endDate)
-
-        console.log(end)
 
         end.setMonth(end.getMonth() + 4)
 
@@ -375,7 +357,6 @@ export default function Feature1({ data, theme }) {
 
             setEndDate(new Date(endDay))
             setStartDate(new Date(startDay))
-
         }
     }
 
@@ -383,21 +364,22 @@ export default function Feature1({ data, theme }) {
         <div className={feature1Theme}>
 
             <h1 className="feature-heading">COVID-19 in Victoria</h1>
+            <br></br>
             <Tabs>
                 <TabList>
-                <Tab> Victoria's Daily New cases </Tab>
-                    <Tab> Victoria's Data Graph</Tab>
+                    <Tab> Daily New Cases </Tab>
+                    <Tab> Graph Cases Data</Tab>
                 </TabList>
                 <TabPanel>
                     {displayTodayInfo()}
                 </TabPanel>
                 <TabPanel>
-                    <div id="graph1">
+                    <div>
                         {showGraph()}
                     </div>
                 </TabPanel>
             </Tabs>
         </div>
     )
-
 };
+

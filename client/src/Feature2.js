@@ -1,13 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2'
+import { IoMdInformationCircleOutline } from "react-icons/io";
 import Loader from "react-loader-spinner";
 import "./Feature2.scss"
 
+/**
+ * Feature 2 of application: graph of daily cases, deaths and vaccination rates for different countries
+ * and the options for the adjusting the graph
+ * 
+ * @param {{object[], string}} param0 cases, deaths and vaccination rate data for all countries available from the
+ * API and the current colour theme  
+ * @returns react component of feature 2
+ */
 export default function Feature2({ data, theme }) {
     const [covidData, setData] = useState()
     const [graphData, setGraphData] = useState()
     const [feature2Theme, setTheme] = useState("Feature2-light")
 
+    const [popupShow, setPopupShow] = useState(false)
     const countryRef = useRef()
     const startDateRef = useRef()
     const endDateRef = useRef()
@@ -104,7 +114,7 @@ export default function Feature2({ data, theme }) {
      * data object for the new graph and updates this to the global variable graphData 
      */
     function submit() {
-        // Ali's function called here, result is saved to dataFromUser
+        // either contain the actual data or an error value
         let userSelectedData = validation(countryRef.current.value, startDateRef.current.value, endDateRef.current.value)
 
         if (userSelectedData === 0) {
@@ -353,17 +363,11 @@ export default function Feature2({ data, theme }) {
                 width={10}
             ></Line>
         } else {
-            return <div className="loading-icon">
-
-
-                <div className="loading-div">
-                    <Loader
-                        margin-top="5cm"
-                        type="Oval"
-                        color="#a6a6a6"
-                        height={70}
-                        width={70}></Loader>
-                </div>
+            return <div className="loading-div">
+                <Loader
+                    type="Oval"
+                    color="#a6a6a6">
+                </Loader>
             </div>
         }
     }
@@ -385,7 +389,7 @@ export default function Feature2({ data, theme }) {
         // set all button colours to normal
         Array.prototype.forEach.call(document.getElementsByClassName("time-sel-button-2"), (button) => {
 
-            button.setAttribute("style", "background-color:rgb(131, 143, 255)")
+            button.setAttribute("style", "background-color:rgb(95, 109, 236)")
         })
         // set colour of pressed button to different
         document.getElementById(id).setAttribute("style", "background-color:#5ad3af9a")
@@ -443,6 +447,24 @@ export default function Feature2({ data, theme }) {
             </div>
 
             <div id="rightOptions2">
+
+                <div>
+                    <IoMdInformationCircleOutline className="info-icon" onClick={() => { setPopupShow(!popupShow) }}></IoMdInformationCircleOutline>
+
+                    {popupShow && <div className="popup-div">
+                        <div className="popup-overlay" onClick={() => { setPopupShow(!popupShow) }}>
+                            <div className="popup-content">
+                                Use the options below to change the country and date range the graph on the left is showing.
+                                <br></br>
+                                <br></br>
+                                This data was sourced from:
+                                <br></br>
+                                <a href="https://covid.ourworldindata.org/">Our World In Data COVID-19 Data</a>
+                            </div>
+                        </div>
+                    </div>}
+                </div>
+
                 <h3>Options</h3>
                 <label className="input-label-2">Country Selection: </label>
                 <input ref={countryRef} list="countryList" id="countrySelection" name="countrySelection" className="input-field-2" defaultValue={defaultCountry} />
@@ -455,10 +477,11 @@ export default function Feature2({ data, theme }) {
                 <button className="time-sel-button-2" id="yearButton" onClick={() => { timeButtonClick("yearButton"); }}>Past Year</button>
                 <button className="time-sel-button-2" id="otherButton" onClick={() => { timeButtonClick("otherButton"); }}>Other</button>
                 <br></br>
+                <br></br>
 
                 <label className="small-label-2">From: </label>
                 <input ref={startDateRef} disabled className="date-field-2" id="fromDate" type="date" />
-                <br></br>
+
                 <label className="small-label-2">Until: </label>
                 <input ref={endDateRef} disabled className="date-field-2" id="toDate" type="date" />
 

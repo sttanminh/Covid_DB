@@ -3,6 +3,13 @@ import { run } from './SIR'
 import { IoMdHelpCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
 import "./Feature3.scss"
 
+/**
+ * Feature 3 of application: Engine for predicting daily cases and daily deaths using the SIRD model
+ * 
+ * @param {{object[], string}} param0 cases, deaths and vaccination rate data for all countries available from the
+ * API and the current colour theme   
+ * @returns react component of the feature
+ */
 export default function Feature3({ data, theme }) {
     const [covidData, setData] = useState()
     const [object, setObject] = useState(null)
@@ -110,18 +117,13 @@ export default function Feature3({ data, theme }) {
 
         // Performing error checks for user input
         if (vacRate !== undefined && vacRate !== null && vacRate >= 0 && vacRate <= 100 && vacRate.length !== 0) {
-            if (day !== undefined && day !== null && day.length !== 0) {
+            if (day !== undefined && day !== null && day.length !== 0 && day >= 1) {
                 let foundCountry = false
                 for (let i = 0; i < covidData.length; i++) {
                     if (covidData[i][1].location === countrySelection) {
-                        let population = covidData[i][1].population
-                        // alert(`Engine successfully ran!
-                        // Output: ${SIRcal(countrySelection, vacRate)}`)
-                        // engineOutput = `For the given vaccination rate of ${vacRate}% in the country ${countrySelection} there are '{SIRcal(countrySelection, vacRate)}' blah blah`
                         foundCountry = true
                         break
                     }
-
                 }
                 if (!foundCountry) {
                     alert("Your selected country is invalid or empty")
@@ -129,7 +131,7 @@ export default function Feature3({ data, theme }) {
                 }
             }
             else {
-                alert("Your other input was invalid or empty")
+                alert("Your input was invalid or empty, please ensure the day number is given as a valid number greater than 1.")
                 return
             }
         }
@@ -166,12 +168,11 @@ export default function Feature3({ data, theme }) {
      */
     function ShowHelpIcon() {
         if (!helpBoxState) {
-            return <IoMdHelpCircleOutline onClick={() => { setHelpBoxState(!helpBoxState) }} className="help-icon"></IoMdHelpCircleOutline>
+            return <IoMdHelpCircleOutline onClick={() => { setHelpBoxState(!helpBoxState) }} className="help-icon-3"></IoMdHelpCircleOutline>
         } else {
-            return <IoMdCloseCircleOutline onClick={() => { setHelpBoxState(!helpBoxState) }} className="help-icon"></IoMdCloseCircleOutline>
+            return <IoMdCloseCircleOutline onClick={() => { setHelpBoxState(!helpBoxState) }} className="help-icon-3"></IoMdCloseCircleOutline>
         }
     }
-
 
     /**
      * Creates a HTML object for the div which appears when the help button is clicked
@@ -180,9 +181,9 @@ export default function Feature3({ data, theme }) {
      */
     function ShowHelp() {
         if (helpBoxState) {
-            return <div className="help-body-div">
+            return <div className="help-body-div-3">
                 <h3>Help Information</h3>
-                <p className="help-body-text">
+                <p className="help-body-text-3">
                     The COVID ENGINE uses the SIRD model to estimate the number of cases per day and number of deaths
                     per day in the specified country when its population is at the specified vaccination rate (fully vaccinated)
                     on a specified number of days after the initial outbreak. <br></br>

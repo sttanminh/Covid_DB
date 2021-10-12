@@ -29,7 +29,7 @@ code {
   text-align: center;
 }
 
-// shared for all other features of the app
+// CSS shared for all other features of the app
 h2 {
   font-size: 3.8vh;
   font-weight: 600;
@@ -40,7 +40,7 @@ h2 {
 h3 {
   font-size: 2.8vh;
   font-weight: 500;
-  margin: 1.57vh;
+  margin: 0 1.57vh 1.57vh 1.57vh;
   cursor: default;
 }
 
@@ -75,10 +75,55 @@ button {
   }
 }
 
-.highlight-red {
-  color: rgb(218, 49, 49);
+.highlight {
+  &-red {
+    color: rgb(218, 49, 49);
+  }
+  &-blue {
+    color: rgb(35, 107, 167);
+  }
 }
 
-.highlight-blue {
-  color: rgb(35, 107, 167);
+.loading-div {
+  width: auto;
+  margin-top: 30%;
+}
+
+.info-icon {
+  cursor: pointer;
+  float: right;
+  font-size: 4vh;
+  fill: rgb(168, 168, 168);
+}
+
+.popup {
+  &-div,&-overlay {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  &-overlay {
+    background: rgba(50,50,50,0.8);
+  }
+
+  &-content {
+    width: auto;
+    height: auto;
+    top: 40%;
+    left: 50%;
+    max-width: 70%;
+    min-width: 30%;
+    background: #f2f2f2;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    padding: 3vh 5vh;
+    border-radius: 2vh;
+    font-size: 2.25vh;
+    color: black;
+  }
 }

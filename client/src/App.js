@@ -4,6 +4,9 @@ import Feature3 from './Feature3'
 import Feature2 from './Feature2';
 import Feature1 from './Feature1';
 
+/**
+ * Main application
+ */
 function App() {
   const [data, setData] = useState()
   const [VictoriaData, setVicData] = useState()
@@ -17,17 +20,16 @@ function App() {
       .then(response => response.json())
       .then(data => {
         setData(data)
-        console.log(data)
+        //console.log(data)
       });
   }, [])
 
   useEffect(() => {
-    console.log("before fetch")
-    fetch('https://covid-2021-db.herokuapp.com/victoria-cases')
+    fetch('http://localhost:9123/victoria-cases')
       .then(response => response.json())
       .then(data => {
         setVicData(data)
-        console.log(data)
+        //console.log(data)
       })
       .catch(function (err) {
         // There was an error
@@ -38,6 +40,7 @@ function App() {
     window.scrollTo(0, 0)
 
   }, [top_page])
+
   /**
    * Changes the theme of the app when the button is clicked
    */
@@ -53,26 +56,33 @@ function App() {
       setButton({ text: "Light Mode", textColour: "black", bkgColor: "#ffdc3e" });
     }
   }
-  function top(){
-    if (top_page == 1){
+
+  /**
+   * Moves the current view back to the top; scrolls page to the top
+   */
+  function top() {
+    if (top_page === 1) {
       setTop(0)
     }
-    else{
+    else {
       setTop(1)
     }
   }
+
   return (
     <div className={theme}>
 
-      <Feature3 data={data} theme={theme}></Feature3>
+      <Feature1 data={VictoriaData} theme={theme}></Feature1>
 
       <Feature2 data={data} theme={theme}></Feature2>
 
-      <Feature1 data={VictoriaData} theme={theme}></Feature1>
+      <Feature3 data={data} theme={theme}></Feature3>
+
       <button ref={themeButtonRef} style={{ color: modeButton.textColour, backgroundColor: modeButton.bkgColor }}
         id="themeButton" onClick={() => { nightButton() }}>{modeButton.text}</button>
-      <button className= "topButton" ref={themeButtonRef} style={{ color: modeButton.textColour, backgroundColor: modeButton.bkgColor }}
-  onClick={() => { top() }}>Top</button>
+
+      <button id="topButton" ref={themeButtonRef} style={{ color: modeButton.textColour, backgroundColor: modeButton.bkgColor }}
+        onClick={() => { top() }}>Top</button>
     </div>
   );
 }
