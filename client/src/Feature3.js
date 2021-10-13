@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { run } from './SIR'
-import { IoMdHelpCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
+import { IoMdHelpCircleOutline, IoMdCloseCircleOutline,IoMdInformationCircleOutline } from "react-icons/io";
 import "./Feature3.scss"
 
 /**
@@ -15,7 +15,7 @@ export default function Feature3({ data, theme }) {
     const [object, setObject] = useState(null)
     const [helpBoxState, setHelpBoxState] = useState(false)
     const [feature3Theme, setTheme] = useState("Feature3-light")
-
+    const [popupShow, setPopupShow] = useState(false)
     const countryRef = useRef()
     const vacRateRef = useRef()
     const dayNumRef = useRef()
@@ -208,8 +208,33 @@ export default function Feature3({ data, theme }) {
 
     return (
         <div className={feature3Theme}>
-            <ShowHelpIcon></ShowHelpIcon>
-            <ShowHelp></ShowHelp>
+            {/* <ShowHelpIcon></ShowHelpIcon> */}
+            {/* <ShowHelp></ShowHelp> */}
+            <IoMdInformationCircleOutline className="info-icon" onClick={() => { setPopupShow(!popupShow) }}></IoMdInformationCircleOutline>
+            {popupShow && <div className="popup-div">
+                    <div className="popup-overlay" onClick={() => { setPopupShow(!popupShow) }}>
+                    <div className="popup-content">
+                        <h3>Help Information</h3>
+                        <p className="help-body-text-3">
+                            The COVID ENGINE uses the SIRD model to estimate the number of cases per day and number of deaths
+                            per day in the specified country when its population is at the specified vaccination rate (fully vaccinated)
+                            on a specified number of days after the initial outbreak. <br></br>
+                            <br></br>
+                            <span className="highlight-red">SIRD</span> Model: Stands for:<br></br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Susceptible:</span> the part of the population that can still be infected <br></br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Infected:</span> the part of the population that is currently infected <br></br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Recovered:</span> the part of the population that have recovered after infection <br></br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Dead:</span> the part of the population who has died <br></br>
+                            <br></br>
+                            Input Guide: <br></br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Vaccination Rate:</span> Percentage of fully vaccinated in the whole population <br></br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Day Number:</span> Number of days from the initial outbreak <br></br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="highlight-blue">Country Selection:</span> Target country to run estimation for
+                        </p>
+            </div>
+                    </div>
+                </div>}
+
 
             <h1 className="feature-heading"> Covid Engine</h1>
             <br></br>
