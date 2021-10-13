@@ -8,6 +8,7 @@ ReactDOM.render(
   <React.StrictMode>
     <div id="headerDiv">
       <h1 id="mainHeading">Covid Dashboard</h1>
+      <p className= "author">Create by Tan,Linh,Nikki,Ryan,Ali</p>
     </div>
 
     <App />
