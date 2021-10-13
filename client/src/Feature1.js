@@ -374,7 +374,7 @@ export default function Feature1({ data, theme }) {
                     {displayTodayInfo()}
                 </TabPanel>
                 <TabPanel>
-                    <div>
+                    <div className= "chartDiv">
                         {showGraph()}
                     </div>
                 </TabPanel>

@@ -31,6 +31,8 @@
   color: #ffffb3;
 
   #leftGraph2 {
+    border: groove;
+    border-color: darkkhaki;
     background-color: rgb(200, 200, 200);
   }
 
@@ -40,8 +42,16 @@
   }
 
   .input-field-2 {
+    margin-right: 4vh;
+    border-radius: 5px;
     background-color: rgb(200, 200, 200);
     border-color: transparent;
+  }
+  .input-field-2:focus {
+    outline: none;
+    margin-right: 4vh;
+    border-radius: 5px;
+    background-color: rgb(200, 200, 200);
   }
 
   .date-field-2 {
@@ -63,6 +73,7 @@
 }
 
 .input-field-2 {
+  border-radius: 5px;
   font-size: 2vh;
   height: 2.25vh;
   margin: 1vh;
@@ -98,6 +109,9 @@
 }
 
 #leftGraph2 {
+  border-width: thin;
+  border: groove;
+  border-radius: 25px;
   width: 57.5%;
   float: left;
   height: 85%
@@ -110,10 +124,14 @@
 }
 
 #graphOptions2 {
+  border-radius: 25px;
   font-size: 1.5vh;
   height: 11.5vh;
   margin: 5%;
   text-align: left;
   padding: 0.3vh 2.35vh 0.3vh;
   cursor: default;
+}
+.chart {
+  border-radius: 25px;
 }

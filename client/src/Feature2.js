@@ -307,6 +307,8 @@ export default function Feature2({ data, theme }) {
             }
 
             return <Line
+                className = "chart"
+                
                 data={dataToDisplay}
                 options={{
                     plugins: {

@@ -30,6 +30,12 @@
     border-radius: 3vh;
     color: #ffffb3;
   
+    .chartDiv{
+      border-radius: 25px;
+      border: groove;
+      border-color: darkkhaki;
+      background-color: rgb(200, 200, 200);
+    }
     #graphTab1 {
       background-color: rgb(200, 200, 200);
     }
@@ -82,4 +88,8 @@
     width: 60%;
     margin: 3vh 3vh;  
   }
-  
+  .chartDiv{
+    border-radius: 25px;
+    border: groove;
+    background-color: rgb(255, 255, 255);
+  }

@@ -3,12 +3,12 @@
   background: linear-gradient(120deg, #f2f2f2, #f2f2f2, #f2f2f2);
   width: 90vh;
   height: 70vh;
-  margin-top: 7vh;
-  padding: 3vh;
-  margin: 3vh auto;    
-  border-radius: 3vh;
+  margin-top: 40px;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 20px;
 
-  .help-body-div-3 {
+  .help-body-div {
     border: 1vh double #ffdc3e;
     background-color: white;
   }
@@ -21,10 +21,10 @@
   background: linear-gradient(120deg, #3a3d3a, #3a3d3a, #3a3d3a);
   width: 90vh;
   height: 70vh;
-  margin-top: 7vh;
-  padding: 3vh;
-  margin: 3vh auto;    
-  border-radius: 3vh;
+  margin-top: 40px;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 20px;
   color: #ffffb3;
 
   .input-field-3 {
@@ -32,7 +32,7 @@
     border-color: transparent;
   }
 
-  .help-body-div-3 {
+  .help-body-div {
     border: 1vh double ivory;
     background-color: #161716;
   }
@@ -40,7 +40,7 @@
 
 .help {
 
-  &-icon-3 {
+  &-icon {
       cursor: pointer;
       float: right;
       font-size: 5vh;
@@ -49,18 +49,18 @@
 
   &-body {
 
-    &-div-3 {
+    &-div {
       position: absolute;
       width: 80vh;
-      padding: 2vh 3vh 4vh 3vh;
+      padding: 0 3vh 4vh 3vh;
       margin-top: 8vh;
-      // container size 90vh, this div 80vh, half of 10vh = 5vh 
-      // 5vh - 3vh padding - 1vh border = 1vh margin, to make center
-      margin-left: 1vh;
+      // container size 90vh, this div 80vh, 
+      // half of 10vh = 5vh - 3vh padding - 0.5 border, to make center
+      margin-left: 1.5vh;
       cursor: default;
     }
 
-    &-text-3 {
+    &-text {
       text-align: left;
       font-size: 2.25vh;
     }
@@ -75,6 +75,7 @@
 }
 
 .input-field-3 {
+  border-radius: 25px;
   font-size: 2vh;
   height: 2.25vh;
   float: left;
@@ -83,6 +84,16 @@
   margin-bottom: 3vh;
 }
 
+.input-field-3 {
+  outline: none;
+  border-radius: 25px;
+  font-size: 2vh;
+  height: 2.25vh;
+  float: left;
+  margin-left: 12.5%;
+  width: 50%;
+  margin-bottom: 3vh;
+}
 #innerDiv3 {
   margin: 20px 0 40px 0;
 }
